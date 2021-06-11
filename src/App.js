@@ -1,23 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {removeUser, userLoad} from "./action";
+
+
 
 function App() {
+  const user = useSelector(state => state.users);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(userLoad())
+  }, [])
+
+  const handleDelete = (id) => {
+    dispatch (removeUser(id))
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="header">
+        Список пользователей
+      </div>
+      {user.map(item => {
+        return(
+            <div className="main">
+              <input type="checkbox"/>
+              <div className="userName">
+                {item.name}
+              </div>
+              <button onClick={() => handleDelete(item.id)}>
+                Удалить пользователя
+              </button>
+            </div>
+        )
+      })}
     </div>
   );
 }
